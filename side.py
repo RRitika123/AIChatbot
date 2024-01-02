@@ -5,21 +5,29 @@ import pandas as pd
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
 from langchain.llms import GooglePalm
-
 from dotenv import load_dotenv, find_dotenv
 
+from langchain.prompts import PromptTemplate
+from langchain.chains import LLMChain, SimpleSequentialChain, SequentialChain
+from langchain.agents.agent_toolkits import create_python_agent
+from langchain.tools.python.tool import PythonREPLTool 
+from langchain.agents.agent_types import AgentType
+from langchain.utilities import WikipediaAPIWrapper
+
+
 load_dotenv()
-
-
-llm = GooglePalm(google_api_key= os.getenv('GOOGLE_API_KEY'), temperature = 0.2)
-
 
 st.title("AI Assistant for Data Science 🤖")
 
 st.write("Hello I am your AI Assistant. And I am here to help you with DataScience projects")
 with st.sidebar:
     st.write('*Your Data Science project starts with a excel file.*')
-    st.caption('''**You may already know that every exciting data science journey starts with a dataset. That's why I'd love for you to upload a CSV file. Once we have your data in hand, we'll dive into understanding it and have some fun exploring it. Then, we'll work together to shape your business challenge into a data science framework. I'll introduce you to the coolest machine learning models, and we'll use them to tackle your problem. Sounds fun right?**''')
+    st.caption('''**You may already know that every exciting data science journey starts with a dataset.
+    That's why I'd love for you to upload a CSV file.
+    Once we have your data in hand, we'll dive into understanding it and have some fun exploring it.
+    Then, we'll work together to shape your business challenge into a data science framework.
+    I'll introduce you to the coolest machine learning models, and we'll use them to tackle your problem. Sounds fun right?**
+    ''')
     st.divider()
     st.caption("<p style='text-align:center'> by Ritika</p>", unsafe_allow_html=True)
 
@@ -29,15 +37,11 @@ with st.sidebar:
 if 'clicked' not in st.session_state:
     st.session_state.clicked = {1: False}
 
-with st.sidebar:
-    with st.expander("What are the steps of EDA ?"):
-        st.caption(llm("What are steps of EDA ?"))
-
-
-
 # Function to update a value in session state
 def clicked(button):
     st.session_state.clicked[button] = True
+
+
 st.button("Let's get started", on_click=clicked, args=[1])
 if st.session_state.clicked[1]:
     st.header("Exploratory Data Analysis Part")
@@ -48,9 +52,17 @@ if st.session_state.clicked[1]:
         user_csv.seek(0)
         df = pd.read_csv(user_csv, low_memory=False)
 
+        llm = GooglePalm(google_api_key= os.getenv('GOOGLE_API_KEY'), temperature = 0.2)
+
+        #Function sidebar
+        @st.cache_data
+        def steps_eda():
+            steps_eda = llm('What are the steps of EDA')
+            return steps_eda
 
         pandas_agent = create_pandas_dataframe_agent(llm= llm, df =df, verbose=True)
         
+        @st.cache_data
         def function_agent():
             st.write("**Data Overview**")
             st.write("The first rows of your dataset look like this:")
@@ -71,4 +83,95 @@ if st.session_state.clicked[1]:
             new_features = pandas_agent.run("What new features would be interesting to create?.")
             st.write(new_features)
             return
+        
+        @st.cache_data
+        def function_question_variable():
+            st.line_chart(df, y =[user_question_variable])
+            summary_statistics = pandas_agent.run(f"Give me a summary of the statistics of {user_question_variable}")
+            st.write(summary_statistics)
+            outliers = pandas_agent.run(f"Assess the presence of outliers of {user_question_variable}")
+            st.write(outliers)
+            trends = pandas_agent.run(f"Analyse trends, seasonality, and cyclic patterns of {user_question_variable}")
+            st.write(trends)
+            missing_values = pandas_agent.run(f"Determine the extent of missing values of {user_question_variable}")
+            st.write(missing_values)
+            return
+        
+        @st.cache_data
+        def function_question_dataframe():
+            dataframe_info = pandas_agent.run(user_question_dataframe)
+            st.write(dataframe_info)
+            return
+        
+        @st.cache_resource
+        def wiki(prompt):
+            wiki_research = WikipediaAPIWrapper().run(prompt)
+            return wiki_research
+                
+        @st.cache_data
+        def prompt_templates():
+            problem_template = PromptTemplate(
+                input_variables=["business_problem"],
+                template="Convert the following business problem into a data science problem: {business_problem}"
+            )
+
+            model_template = PromptTemplate(
+                input_variables=["data_problem"],
+                template="Give a list of algorithms that are suitable for the problem: {data_problem}, while using this wikipedia research where {wikipedia_research}"
+            )
+
+            return problem_template, model_template
+        
+        @st.cache_data
+        def chains():
+            problem_chain = LLMChain(llm=llm, prompt = prompt_templates()[0], verbose=True, output_key="data_problem")
+            model_chain = LLMChain(llm=llm, prompt =  prompt_templates()[1], verbose=True, output_key="model_selection")
+            chain = SequentialChain(chains=[problem_chain, model_chain], input_variables=["business_problem"], output_variables=["data_problem","model_selection"], verbose=True)           
+            return chain
+        
+        
+        def chains_output(prompt, wiki_research):
+            my_chain = chains()
+            my_chain_output = my_chain({'business_problem':prompt, 'wikipedia_research': wiki_research})
+            problem = my_chain_output["data_problem"]
+            model = my_chain_output["model_selection"]
+            return problem, model
+
+        #Main
+        st.header('Exploratory data analysis')
+        st.subheader('General information about the dataset')
+
+        with st.sidebar:
+            with st.expander('What are the steps of EDA'):
+                st.write(steps_eda())
+
         function_agent()
+
+        st.subheader('Variable of study')
+        user_question_variable = st.text_input('What variable are you interested in')
+        if user_question_variable is not None and user_question_variable !="":
+            function_question_variable()
+
+            st.subheader('Further study')
+
+        if user_question_variable:
+            user_question_dataframe = st.text_input( "Is there anything else you would like to know about your dataframe?")
+            if user_question_dataframe is not None and user_question_dataframe not in ("","no","No"):
+                function_question_dataframe()
+            if user_question_dataframe in ("no", "No"):
+                st.write("")       
+
+                if user_question_dataframe:
+                    st.divider()
+                    st.header("DataScience Problem")
+                    st.write("Now that we have a solid grasp of the data")
+                    
+                    prompt = st.text_area("What is the business problem that you want to solve?")
+
+
+                    if prompt:
+                        wiki_research = wiki(prompt)
+                        problem = chains_output(prompt, wiki_research)[0]
+                        model = chains_output(prompt, wiki_research)[1]
+                        st.write('data_problem')
+                        st.write('model_selection')
