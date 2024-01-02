@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Streamlit web application serves as an AI Assistant for Data Science projects. It guides users through the initial steps of data analysis and exploration, providing insights and recommendations based on user-uploaded CSV files. The assistant leverages natural language processing models, including Google's Palm Language Model (GooglePalm), to interactively assist users in their data science journey.
+This Streamlit web application serves as an AI Assistant for Data Science projects. It guides users through the initial steps of data analysis and exploration, providing insights and recommendations based on user-uploaded CSV files. The assistant leverages natural language processing models, including Google's Language Model (GooglePalm), to interactively assist users in their data science journey.
 
 ## Features
 
@@ -17,7 +17,7 @@ To run the AI Assistant locally, follow these steps:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/your-username/your-repository.git
-   cd your-repository
+   git clone https://github.com/RRitika123/AIChatbot 
+      cd your-repository
 
 
