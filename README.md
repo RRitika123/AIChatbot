@@ -16,8 +16,37 @@ To run the AI Assistant locally, follow these steps:
 
 1. Clone the repository:
 
-   ```bash
+```bash
    git clone https://github.com/RRitika123/AIChatbot 
-      cd your-repository
+   cd your-repository
+```
 
+2. Install the required dependencies:
+```bash
+    pip install -r requirements.txt
+```
 
+3. Create a .env file in the project root directory and add your Google API key:
+```bash
+    GOOGLE_API_KEY=your-google-api-key
+```
+
+4. Run the streamlit application:
+```bash
+    streamlit run side.py
+```
+
+## Usage
+1. Launch the application and navigate to the "Data Analysis and Data Science" tab.
+
+2. Upload a CSV file using the file uploader.
+
+3. Follow the guided EDA steps provided by the AI Assistant.
+
+4. Engage with the ChatBox to ask questions, explore specific variables, and define data science problems.
+
+## Dependencies
+- streamlit: The web application framework for creating interactive data science dashboards.
+- pandas: Used for handling and manipulating data in DataFrames.
+- langchain: A library for natural language processing, including agents, prompts, and chains.
+- dotenv: For loading environment variables from a .env file.
