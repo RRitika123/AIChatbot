@@ -4,17 +4,15 @@ import pandas as pd
 
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.agents.agent_types import AgentType
-from langchain.llms import OpenAI
-
+from langchain.llms import GooglePalm
 
 from dotenv import load_dotenv, find_dotenv
 
-import google.generativeai as genai
 load_dotenv()
 
-llm = OpenAI(openai_api_key= os.environ["OPENAI_API_KEY"] ,temperature = 0)
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-model = genai.GenerativeModel('gemini-pro')
+
+llm = GooglePalm(google_api_key= os.getenv('GOOGLE_API_KEY'), temperature = 0.2)
+
 
 st.title("AI Assistant for Data Science 🤖")
 
@@ -31,9 +29,9 @@ with st.sidebar:
 if 'clicked' not in st.session_state:
     st.session_state.clicked = {1: False}
 
-# with st.sidebar:
-#     with st.expander("What are the steps of EDA ?"):
-#         st.caption(model.generate_content("What are steps of EDA ?").text)
+with st.sidebar:
+    with st.expander("What are the steps of EDA ?"):
+        st.caption(llm("What are steps of EDA ?"))
 
 
 
@@ -51,20 +49,26 @@ if st.session_state.clicked[1]:
         df = pd.read_csv(user_csv, low_memory=False)
 
 
-
-
-        st.write("**Data Overview**")
-        st.write("The first rows of your dataset looks like this:")
-        st.write(df.head())
-        st.write(create_pandas_dataframe_agent(llm= model, df =df, verbose=True).run("What are the meanings of the columns??"))
-        #st.write(create_pandas_dataframe_agent(llm, df, verbose=True).run("How many missing values are there in this dataset?"))
-
-        # def function_agent():
-        #     st.write("**Data cleaning**")
-        #     columns_df = pandas_agent.run("What are the meanings of the columns?")
-        #     st.write(columns_df)
-        #     # missing_values = pandas_agent.run("How many missing values are there in this dataset?")
-        #     # st.write(missing_values)
-        #     return 
-
-        # function_agent()
+        pandas_agent = create_pandas_dataframe_agent(llm= llm, df =df, verbose=True)
+        
+        def function_agent():
+            st.write("**Data Overview**")
+            st.write("The first rows of your dataset look like this:")
+            st.write(df.head())
+            st.write("**Data Cleaning**")
+            columns_df = pandas_agent.run("What are the meaning of the columns?")
+            st.write(columns_df)
+            missing_values = pandas_agent.run("How many missing values does this dataframe have? Start the answer with 'There are'")
+            st.write(missing_values)
+            duplicates = pandas_agent.run("Are there any duplicate values and if so where?")
+            st.write(duplicates)
+            st.write("**Data Summarisation**")
+            st.write(df.describe())
+            correlation_analysis = pandas_agent.run("Calculate correlations between numerical variables to identify potential relationships.")
+            st.write(correlation_analysis)
+            outliers = pandas_agent.run("Identify outliers in the data that may be erroneous or that may have a significant impact on the analysis.")
+            st.write(outliers)
+            new_features = pandas_agent.run("What new features would be interesting to create?.")
+            st.write(new_features)
+            return
+        function_agent()
