@@ -55,19 +55,19 @@ To run the AI Assistant locally, follow these steps:
 
 ### 1. streamlit
 
-[Streamlit](https://streamlit.io/) is a popular Python library for creating web applications with minimal effort. It is especially well-suited for building interactive data science dashboards.
+[Streamlit](https://docs.streamlit.io/get-started/fundamentals/main-concepts) is a popular Python library for creating web applications with minimal effort. It is especially well-suited for building interactive data science dashboards.
 
 ### 2. Pandas
 
-[Pandas](https://pandas.pydata.org/) is a powerful data manipulation library for Python. It provides data structures like DataFrames, making it easy to handle and analyze tabular data.
+[Pandas](https://pandas.pydata.org/docs/user_guide/10min.html) is a powerful data manipulation library for Python. It provides data structures like DataFrames, making it easy to handle and analyze tabular data.
 
 ### 3. Langchain
 
-[Langchain](https://github.com/langchain) is a natural language processing library that includes agents, prompts, and chains. It facilitates interaction with language models and enhances the conversational capabilities of the AI Assistant.
+[Langchain](https://python.langchain.com/docs/get_started/introduction) is a natural language processing library that includes agents, prompts, and chains. It facilitates interaction with language models and enhances the conversational capabilities of the AI Assistant.
 
 ### 4. Google's Palm Language Model (GooglePalm)
 
-[GooglePalm](https://github.com/google-research/palm) is a language model developed by Google Research. It is used for natural language understanding in this AI Assistant, providing capabilities for generating responses and insights based on user input.
+[GooglePalm](https://ai.google.dev/palm_docs/text_quickstart) is a language model developed by Google Research. It is used for natural language understanding in this AI Assistant, providing capabilities for generating responses and insights based on user input.
 
 ### 5. dotenv
 

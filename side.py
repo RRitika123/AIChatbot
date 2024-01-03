@@ -3,16 +3,13 @@ import streamlit as st
 import pandas as pd
 
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
-from langchain.agents.agent_types import AgentType
 from langchain.llms import GooglePalm
-from dotenv import load_dotenv, find_dotenv
+from dotenv import load_dotenv
 
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain, SimpleSequentialChain, SequentialChain
 from langchain.agents.agent_toolkits import create_python_agent
 from langchain.tools.python.tool import PythonREPLTool 
-from langchain.agents.agent_types import AgentType
-from langchain.utilities import WikipediaAPIWrapper
 
 
 load_dotenv()
@@ -156,4 +153,6 @@ if st.session_state.clicked[1]:
                             st.write(response["model_selection"])
 
     with tab2:
-        st.write("tab 2")
+        st.header("ChatBox")
+        st.write("Welcome to the AI Assistant ChatBox!")
+        st.write("")
