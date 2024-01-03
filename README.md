@@ -76,7 +76,7 @@ To run the AI Assistant locally, follow these steps:
 - **Tools:** The PythonREPLTool from Langchain is used to integrate a Python REPL (Read-Eval-Print Loop) within the application, enhancing its interactive capabilities.
 
 
-### 4. Google's Palm Language Model (GooglePalm)
+### 4. Google's Language Model (GooglePalm)
 
 [GooglePalm](https://ai.google.dev/palm_docs/text_quickstart) is a language model developed by Google Research. It is used for natural language understanding in this AI Assistant, providing capabilities for generating responses and insights based on user input.
 
