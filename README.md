@@ -50,3 +50,30 @@ To run the AI Assistant locally, follow these steps:
 - pandas: Used for handling and manipulating data in DataFrames.
 - langchain: A library for natural language processing, including agents, prompts, and chains.
 - dotenv: For loading environment variables from a .env file.
+
+## Concepts used
+
+### 1. streamlit
+
+[Streamlit](https://streamlit.io/) is a popular Python library for creating web applications with minimal effort. It is especially well-suited for building interactive data science dashboards.
+
+### 2. Pandas
+
+[Pandas](https://pandas.pydata.org/) is a powerful data manipulation library for Python. It provides data structures like DataFrames, making it easy to handle and analyze tabular data.
+
+### 3. Langchain
+
+[Langchain](https://github.com/langchain) is a natural language processing library that includes agents, prompts, and chains. It facilitates interaction with language models and enhances the conversational capabilities of the AI Assistant.
+
+### 4. Google's Palm Language Model (GooglePalm)
+
+[GooglePalm](https://github.com/google-research/palm) is a language model developed by Google Research. It is used for natural language understanding in this AI Assistant, providing capabilities for generating responses and insights based on user input.
+
+### 5. dotenv
+
+[dotenv](https://pypi.org/project/python-dotenv/) is a Python library that helps in loading environment variables from a `.env` file. It is used in this project to securely manage sensitive information, such as API keys.
+
+
+## Acknowledgments
+
+- The AI Assistant utilizes Google's Palm Language Model for natural language understanding.
