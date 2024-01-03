@@ -36,14 +36,6 @@ To run the AI Assistant locally, follow these steps:
     streamlit run side.py
 ```
 
-## Usage
-1. Launch the application and navigate to the "Data Analysis and Data Science" tab.
-
-2. Upload a CSV file using the file uploader.
-
-3. Follow the guided EDA steps provided by the AI Assistant.
-
-4. Engage with the ChatBox to ask questions, explore specific variables, and define data science problems.
 
 ## Dependencies
 - streamlit: The web application framework for creating interactive data science dashboards.
@@ -99,6 +91,26 @@ Used chromadb in our project
 ### 5. dotenv
 
 [python-dotenv](https://pypi.org/project/python-dotenv/) is a Python library that helps in loading environment variables from a `.env` file. It is used in this project to securely manage sensitive information, such as API keys.
+
+## Usage
+1. Launch the application and click on the Let's get started button.
+![Alt text](<Screenshot 2024-01-03 133651.png>)
+
+2. navigate to the "Data Analysis" tab.
+![Alt text](<Screenshot 2024-01-03 133704.png>)
+
+3. Upload a CSV file using the file uploader.
+
+4. Follow the guided EDA steps provided by the AI Assistant.
+![Alt text](<Screenshot 2024-01-03 133753.png>)
+
+5. Ask details about any specific variable.
+![Alt text](<Screenshot 2024-01-03 134108.png>)
+
+6. Ask the business problem to get the model recommendation.
+![Alt text](<Screenshot 2024-01-03 134255.png>)
+
+7. Engage with the ChatBox to ask questions.
 
 
 ## Acknowledgments

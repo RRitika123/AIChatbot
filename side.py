@@ -7,9 +7,7 @@ from langchain.llms import GooglePalm
 from dotenv import load_dotenv
 
 from langchain.prompts import PromptTemplate
-from langchain.chains import LLMChain, SimpleSequentialChain, SequentialChain
-from langchain.agents.agent_toolkits import create_python_agent
-from langchain.tools.python.tool import PythonREPLTool 
+from langchain.chains import LLMChain, SequentialChain
 
 
 load_dotenv()
@@ -26,7 +24,6 @@ with st.sidebar:
     I'll introduce you to the coolest machine learning models, and we'll use them to tackle your problem. Sounds fun right?**
     ''')
     st.divider()
-    st.caption("<p style='text-align:center'> by Ritika</p>", unsafe_allow_html=True)
 
 
 
@@ -41,9 +38,9 @@ def clicked(button):
 
 st.button("Let's get started", on_click=clicked, args=[1])
 if st.session_state.clicked[1]:
-    tab1, tab2 = st.tabs(["Data Analysis and Data science", "ChatBox"])
+    tab1, tab2 = st.tabs(["Data Analysis", "ChatBox"])
     with tab1:
-        st.header("Exploratory Data Analysis Part")
+        st.header("Exploratory Data Analysis")
         st.subheader("Solution")
         user_csv = st.file_uploader("Upload your csv file here", type= "csv")
 
@@ -63,36 +60,44 @@ if st.session_state.clicked[1]:
             
             @st.cache_data
             def function_agent():
-                st.write("**Data Overview**")
+                st.write(''' - Data Overview''')
                 st.write("The first rows of your dataset look like this:")
                 st.write(df.head())
-                st.write("**Data Cleaning**")
-                columns_df = pandas_agent.run("What are the meaning of the columns?")
+                st.markdown("<hr style='margin-top: 20px; margin-bottom: 20px;'>", unsafe_allow_html=True)
+                st.subheader("**Data Cleaning**")
+                st.write('''- Meaning of the columns:''')
+                columns_df = pandas_agent.run("What are the meaning of the columns? Explain them.")
                 st.write(columns_df)
+                st.write('''- Missing values in the Data:''')
                 missing_values = pandas_agent.run("How many missing values does this dataframe have? Start the answer with 'There are'")
                 st.write(missing_values)
+                st.write('''- Are there any duplicate values?''')
                 duplicates = pandas_agent.run("Are there any duplicate values and if so where?")
                 st.write(duplicates)
-                st.write("**Data Summarisation**")
+                st.write('''- Data Summarisation''')
                 st.write(df.describe())
-                correlation_analysis = pandas_agent.run("Calculate correlations between numerical variables to identify potential relationships.")
+                st.write('''- Correlation between numerical variables:''')
+                correlation_analysis = pandas_agent.run("Calculate correlations between numerical variables to identify potential relationships. If there are no two numerical variable then return No two numerical variables ")
                 st.write(correlation_analysis)
-                outliers = pandas_agent.run("Identify outliers in the data that may be erroneous or that may have a significant impact on the analysis.")
-                st.write(outliers)
-                new_features = pandas_agent.run("What new features would be interesting to create?.")
+                #outliers = pandas_agent.run("Identify outliers in the data that may be erroneous or that may have a significant impact on the analysis.")
+                #st.write(outliers)
+                st.write('''- What New features can be added ?''')
+                new_features = pandas_agent.run("What new features would be interesting to create? Please mention only the name of the new variable.")
                 st.write(new_features)
                 return
             
             @st.cache_data
             def function_question_variable():
                 st.line_chart(df, y =[user_question_variable])
-                summary_statistics = pandas_agent.run(f"Give me a summary of the statistics of {user_question_variable}")
+                st.write('''- Summary:''')
+                summary_statistics = pandas_agent.run(f"Give me a summary of the statistics of {user_question_variable} in a table format please.")
                 st.write(summary_statistics)
-                outliers = pandas_agent.run(f"Assess the presence of outliers of {user_question_variable}")
-                st.write(outliers)
-                trends = pandas_agent.run(f"Analyse trends, seasonality, and cyclic patterns of {user_question_variable}")
-                st.write(trends)
-                missing_values = pandas_agent.run(f"Determine the extent of missing values of {user_question_variable}")
+                #outliers = pandas_agent.run(f"Assess the presence of outliers of {user_question_variable}")
+                #st.write(outliers)
+                #trends = pandas_agent.run(f"Analyse trends, seasonality, and cyclic patterns of {user_question_variable}")
+                #st.write(trends)
+                st.write('''- Missing values for the interested variable is:''')
+                missing_values = pandas_agent.run(f"Determine the extent of missing values of {user_question_variable}.")
                 st.write(missing_values)
                 return
             
@@ -103,7 +108,6 @@ if st.session_state.clicked[1]:
                 return    
 
             #Main
-            st.header('Exploratory data analysis')
             st.subheader('General information about the dataset')
 
             with st.sidebar:
@@ -125,6 +129,8 @@ if st.session_state.clicked[1]:
                     function_question_dataframe()
                 if user_question_dataframe in ("no", "No"):
                     st.write("")       
+                
+                    st.divider()
 
                     if user_question_dataframe:
                         st.divider()
@@ -148,9 +154,12 @@ if st.session_state.clicked[1]:
             
 
                         if prompt:
-                            response = chain({'business_problem':prompt})
-                            st.write(response["data_problem"])
-                            st.write(response["model_selection"])
+                            with st.spinner("Generating response..."):
+                                response = chain({'business_problem':prompt})
+                                st.write(response["data_problem"])
+                                st.write(response["model_selection"])
+                        else:
+                            st.warning("Please enter a prompt.")
 
     with tab2:
         st.header("ChatBox")
