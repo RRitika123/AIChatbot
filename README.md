@@ -65,13 +65,24 @@ To run the AI Assistant locally, follow these steps:
 
 [Langchain](https://python.langchain.com/docs/get_started/introduction) is a natural language processing library that includes agents, prompts, and chains. It facilitates interaction with language models and enhances the conversational capabilities of the AI Assistant.
 
+#### Components of Langchain
+
+ - **Agents:** The application uses Langchain agents to facilitate communication with the GooglePalm language model, allowing for natural language understanding and response generation.
+
+   - **Prompts:** Langchain prompts are employed to structure and format user queries and prompts for the language model.
+
+   - **Chains:** Langchain chains are utilized to sequence multiple language model interactions, enabling a step-by-step approach in guiding users through exploratory data analysis and problem definition.
+
+   - **Tools:** The PythonREPLTool from Langchain is used to integrate a Python REPL (Read-Eval-Print Loop) within the application, enhancing its interactive capabilities.
+
+
 ### 4. Google's Palm Language Model (GooglePalm)
 
 [GooglePalm](https://ai.google.dev/palm_docs/text_quickstart) is a language model developed by Google Research. It is used for natural language understanding in this AI Assistant, providing capabilities for generating responses and insights based on user input.
 
 ### 5. dotenv
 
-[dotenv](https://pypi.org/project/python-dotenv/) is a Python library that helps in loading environment variables from a `.env` file. It is used in this project to securely manage sensitive information, such as API keys.
+[python-dotenv](https://pypi.org/project/python-dotenv/) is a Python library that helps in loading environment variables from a `.env` file. It is used in this project to securely manage sensitive information, such as API keys.
 
 
 ## Acknowledgments
