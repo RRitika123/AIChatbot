@@ -67,14 +67,30 @@ To run the AI Assistant locally, follow these steps:
 
 #### Components of Langchain:
 
+- **LLMs:** A large language model (LLM) is a specialized type of artificial intelligence (AI) that has been trained on vast amounts of text to understand existing content and generate original content.
+LLM used in our project is GooglePalm
+
+- **Chat models:** ChatGooglePalm
+
 - **Agents:** The application uses Langchain agents to facilitate communication with the GooglePalm language model, allowing for natural language understanding and response generation.
+
+    - **create_pandas_dataframe_agent:** use this agent to interact with a Pandas DataFrame. This agent calls the Python agent under the hood, which executes LLM generated Python code.
 
 - **Prompts:** Langchain prompts are employed to structure and format user queries and prompts for the language model.
 
-- **Chains:** Langchain chains are utilized to sequence multiple language model interactions, enabling a step-by-step approach in guiding users through exploratory data analysis and problem definition.
+    - **PromptTemplate:** 
 
-- **Tools:** The PythonREPLTool from Langchain is used to integrate a Python REPL (Read-Eval-Print Loop) within the application, enhancing its interactive capabilities.
+- **Chains:** Chains allow us to combine multiple components together to create a single, coherent application. For example, we can create a chain that takes user input, formats it with a PromptTemplate, and then passes the formatted response to an LLM. We can build more complex chains by combining multiple chains together, or by combining chains with other components.
 
+    - **LLMChain:** The LLMChain is most basic building block chain. It takes in a prompt template, formats it with the user input and returns the response from an LLM.
+    - **SimpleSequentialChain:** The simplest form of sequential chains, where each step has a singular input/output, and the output of one step is the input to the next.
+    - **SequentialChain:** A more general form of sequential chains, allowing for multiple inputs/outputs.
+
+- **Document loaders:** 
+
+- **Vector Stores:** One of the most common ways to store and search over unstructured data is to embed it and store the resulting embedding vectors, and then at query time to embed the unstructured query and retrieve the embedding vectors that are 'most similar' to the embedded query. A vector store takes care of storing embedded data and performing vector search for you.
+
+Used chromadb in our project
 
 ### 4. Google's Language Model (GooglePalm)
 
