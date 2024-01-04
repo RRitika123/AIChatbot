@@ -1,6 +1,7 @@
 import os
 import streamlit as st
 import pandas as pd
+from PyPDF2 import PdfReader
 
 from langchain_experimental.agents.agent_toolkits import create_pandas_dataframe_agent
 from langchain.llms import GooglePalm
@@ -162,6 +163,13 @@ if st.session_state.clicked[1]:
                             st.warning("Please enter a prompt.")
 
     with tab2:
-        st.header("ChatBox")
-        st.write("Welcome to the AI Assistant ChatBox!")
-        st.write("")
+        st.title("ChatBox")
+        st.write("talk with your dataScience book here!")
+        pdf = st.file_uploader("Upload your book in pdf form", type="pdf")
+        if pdf is not None:
+            st.write(pdf)
+            pdf_obj = PdfReader(pdf)
+            for page in pdf_obj.pages[:3]:
+                
+
+
